@@ -7,8 +7,9 @@ document.getElementById('form').addEventListener('submit',async (e) => {
     password: password.value,
   }
   try{
-    const { data } = await axios.post('/user', user)
-    document.getElementById('username').innerHTML = data
+    const { data: {name, password} } = await axios.post('/user', user)
+    const list = document.querySelector('.username')
+    list.innerHTML = `${name} 환영합니다!`
     
   }catch(err){
     console.log(err)

@@ -25,13 +25,11 @@ const server = http.createServer(async (req, res) => {
         req.on('data', (data) => body += data)
 
         return req.on('end', () => {
-          console.log('Post data', body)
           const data = JSON.parse(body)
           const id = Date.now();
           users[id] = data
-      
           res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
-          res.end('등록 완료')
+          res.end(JSON.stringify(data))
         })
       }
     }
