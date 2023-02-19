@@ -1,6 +1,8 @@
 const http = require('http')
 const fs = require('fs').promises 
 
+const users = {}
+
 const server = http.createServer(async (req, res) => {
   try {
     if(req.method === 'GET'){
@@ -12,9 +14,28 @@ const server = http.createServer(async (req, res) => {
         res.writeHead(200, { 'Content-type': 'text/html; charset-utf-8'})
         const data = await fs.readFile('./login.html')
         return res.end(data)
+      }else {
+        res.writeHead(200, {'Content-type': 'text/html; charset-utf-8'})
+        const data = await fs.readFile(`.${req.url}`)
+        return res.end(data)
+      }
+    }else if(req.method === 'POST'){
+      if(req.url === '/user'){
+        let body = ''
+        req.on('data', (data) => body += data)
+
+        return req.on('end', () => {
+          console.log('Post data', body)
+          const data = JSON.parse(body)
+          const id = Date.now();
+          users[id] = data
+      
+          res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
+          res.end('등록 완료')
+        })
       }
     }
-  } catch(err) { 
+  }catch(err) { 
     console.log(err)
   }
 })
