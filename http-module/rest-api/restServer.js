@@ -34,14 +34,24 @@ const server = http.createServer(async (req, res) => {
       }
     }else if(req.method === 'PUT') {
       if(req.url.startsWith('/user/')){
-        const key = req.url.split('/')[2];
-        let body = '';
+        const key = req.url.split('/')[2]
+        let body = ''
         req.on('data', (data) => body += data)
         
         return req.on('end', () => {
           users[key] = JSON.parse(body);
           res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
           res.end(JSON.stringify(users))
+        })
+      }
+    }else if(req.method === 'DELETE') {
+      console.log('1')
+      if(req.url.startsWith('/user/')){
+        const key = req.url.split('/')[2]
+        return req.on('end', () => {
+          delete users[key]
+          res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
+          res.end('삭제완료!')
         })
       }
     }

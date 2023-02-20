@@ -3,6 +3,7 @@ const form = document.querySelector('#form')
 const showUpdateForm = document.querySelector('#btn')
 const updateInput = document.querySelector('#updateInput')
 const updateBtn = document.querySelector('#updateBtn')
+const removeBtn = document.querySelector('#removeBtn')
 
 document.getElementById('form').addEventListener('submit',async (e) => {
   e.preventDefault();
@@ -20,10 +21,11 @@ document.getElementById('form').addEventListener('submit',async (e) => {
     list.innerHTML = `${name}님 환영합니다!`
     form.style.display = "none";
     showUpdateForm.style.display = 'inline-block'
-    
+    removeBtn.style.display = "inline-block"
     showUpdateForm.addEventListener('click', () => {
       showUpdateForm.style.display = "none"
       updateForm.style.display = "inline-block"
+      
     })
     
     updateBtn.addEventListener('click', async (e) => {
@@ -33,6 +35,15 @@ document.getElementById('form').addEventListener('submit',async (e) => {
       list.innerHTML = `${name}님 환영합니다!`
       showUpdateForm.style.display = 'inline-block'
       updateForm.style.display = "none"
+    })
+
+    removeBtn.addEventListener('click', async () => {
+      try{
+        const response =  await axios.delete('/user/' + key);
+        console.log(response)
+      }catch(err){
+        console.log(err)
+      }
     })
   }catch(err){
     console.log(err)
