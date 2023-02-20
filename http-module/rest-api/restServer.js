@@ -26,10 +26,22 @@ const server = http.createServer(async (req, res) => {
 
         return req.on('end', () => {
           const data = JSON.parse(body)
-          const id = Date.now();
+          const id = Date.now()
           users[id] = data
           res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
-          res.end(JSON.stringify(data))
+          res.end(JSON.stringify(users))
+        })
+      }
+    }else if(req.method === 'PUT') {
+      if(req.url.startsWith('/user/')){
+        const key = req.url.split('/')[2];
+        let body = '';
+        req.on('data', (data) => body += data)
+        
+        return req.on('end', () => {
+          users[key] = JSON.parse(body);
+          res.writeHead(200, {'Content-type': 'text/html; charset=utf-8'})
+          res.end(JSON.stringify(users))
         })
       }
     }

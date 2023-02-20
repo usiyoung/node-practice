@@ -10,10 +10,16 @@
   <form id="form">
 	  <h2>회원가입</h2>
 	  아이디: <input type="text" id="username"/>
-	  비밀번호: <input type="text" id="password"/>
+	  비밀번호: <input type="password" id="password"/>
 	  <button type="submit">입력</button>
-    <div id="list"><span class="username"></span></div>
   </form>
+  <div id="list"><span class="info"></span></div>
+  <button style="display:none" id="btn">아이디 변경하기</button>
+  <div id="updateForm" style="display: none;" >
+    <span>변경할 아이디를 입력해주세요!</span>
+    <input type="text" id="updateInput"/>
+    <button id="updateBtn">변경</button>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="./restFront.js"></script>
 </body>
