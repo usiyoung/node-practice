@@ -5,21 +5,43 @@ const app = express()
 
 app.set('port', process.env.PORT || 3000)
 
+/**
+ * 요청과 응답 중간에 위치하여 미들웨어
+ * @param {} req 요청
+ * @param {} res 응답 조작가능
+ * @param {} next 다음 미들웨어로 넘어감
+ *  */ 
 app.use((req, res, next) => {
-  console.log('1모든 요청에 실행하고 싶어요!')
+  console.log('미들웨어1 - 모든 요청에 실행하고 싶어요!')
   next()
 },(req, res, next) => {
-  console.log('2모든 요청에 실행하고 싶어요!')
+  console.log('미들웨어2 -모든 요청에 실행하고 싶어요!')
   next()
 },(req, res, next) => {
-  console.log('3모든 요청에 실행하고 싶어요!')
+  console.log('미들웨어3 -모든 요청에 실행하고 싶어요!')
   next()
 },(req, res, next) => {
-  throw new Error('error')
+  try{
+    console.log('미들웨어4 - 모든 요청에 실행하고 싶어요!')
+    next()
+  }catch(error){
+    // next에 인수를 넣으면 다음 미들웨어로 넘어가지 않고 에러처리 미들웨어로 넘어감
+    console.log(error)
+    next(error)
+  }
 })
 
-app.get('/category/javascript', (req, res) => {
-  res.send(`<h2>Hello JAVASCRIPT!</h2>`)
+app.get('/', (req, res,next) => {
+  console.log('get1 - ')
+  res.send('hi')
+  next('route')
+},(req, res) => {
+  console.log('위에 route있으면 실행 안된다던데..')
+})
+
+app.get('/', (req, res) => {
+  console.log('get2 - ')
+  
 })
 
 app.get('/category/:content', (req, res) => {
@@ -42,17 +64,13 @@ app.get('/about', (req, res) => {
 //   res.send('hello every')
 // })
 
-app.use((req, res, next) => {
-  res.status(404).send('404')
-})
-
 /**
  * 에러 미들웨어
  * @params 반드시 매개변수 4개를 지정
  */
 app.use((err, req, res, next) => {
-  console.log(err)
-  res.status(200).send('error')
+  // 에러가 발생해도 상태를 200으로 내려 보안 유지
+  res.send('<h1>에러 미들웨어 존</h1>')
 })
 
 app.listen(app.get('port'), () => {
