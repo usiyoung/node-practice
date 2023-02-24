@@ -18,7 +18,18 @@ app.set('port', process.env.PORT || 3000)
  */
 app.use(morgan('dev')) // app.use(morgan('combined')) 
 app.use(cookieParser('usiyoung'))
-app.use('/', express.static(__dirname, 'public')) // static 미들웨어는 해당 파일을 찾을 경우 next 실행이 되지 않는다
+
+/**
+ * 미들웨어 확장법
+ */
+app.use('/', (req, res, next) => {
+  if(req.session.id){
+    express.static(__dirname, 'public') // static 미들웨어는 해당 파일을 찾을 경우 next 실행이 되지 않는다
+  }else {
+    next()
+  }
+})
+
 app.use(express.json()) // 클라이언트 json data 파싱
 app.use(express.urlencoded({ extended: true })) // 클라이언트 form submit 파싱
 
