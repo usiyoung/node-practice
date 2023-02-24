@@ -1,7 +1,8 @@
 const express = require('express')
+const morgan = require('morgan') // 요청과 응답을 기록하는 morgan
 const path = require('path')
-
 const app = express()
+const cookieParser = require('cookie-parser')
 
 app.set('port', process.env.PORT || 3000)
 
@@ -10,7 +11,14 @@ app.set('port', process.env.PORT || 3000)
  * @param {} req 요청
  * @param {} res 응답 조작가능
  * @param {} next 다음 미들웨어로 넘어감
- *  */ 
+ *  */
+
+
+app.use(morgan('dev')) // app.use(morgan('combined')) 
+app.use(cookieParser('usiyoung'))
+app.use(express.json()) // 클라이언트 json data 파싱
+app.use(express.urlencoded({ extended: true })) // 클라이언트 form submit 파싱
+
 app.use((req, res, next) => {
   console.log('미들웨어1 - 모든 요청에 실행하고 싶어요!')
   next()
@@ -39,9 +47,19 @@ app.get('/', (req, res,next) => {
   console.log('위에 route있으면 실행 안된다던데..')
 })
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
   console.log('get2 - ')
-  
+  next()
+})
+
+app.get('/', (req, res, next) => {
+  // req.cookies
+  // req.signedCookies
+  res.cookie('name', encodeURIComponent(name), {
+    expires: new Date(),
+    httpOnly: true,
+    path: '/',
+  })
 })
 
 app.get('/category/:content', (req, res) => {
