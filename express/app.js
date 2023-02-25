@@ -1,9 +1,13 @@
+const dotenv = require('dotenv')
 const express = require('express')
 const morgan = require('morgan') // 요청과 응답을 기록하는 morgan
 const path = require('path')
 const app = express()
 const cookieParser = require('cookie-parser')
 
+dotenv.config()
+console.log(dotenv.config())
+console.log(process.env.USIYOUNG_KEY)
 app.set('port', process.env.PORT || 3000)
 
 /**
